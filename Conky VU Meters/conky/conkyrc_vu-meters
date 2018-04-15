@@ -1,0 +1,122 @@
+conky.config = {
+--==============================================================================
+--                                  conkyrc_vu-meters
+--  author  : CAYMUS-conkyrc_7b
+--  Modified : autocrosser
+--  version : v20151001-08 Modified: V20170820
+--  license : Distributed under the terms of GNU GPL version 2 or later
+--==============================================================================
+
+	cpu_avg_samples = 2,
+	net_avg_samples = 2,
+	temperature_unit = 'celsius',
+
+	double_buffer = true,
+	text_buffer_size = 2048,
+	update_interval = 0.5,
+	total_run_times = 0,
+
+	gap_x = 0,
+	gap_y = 30,
+	minimum_width = 180, minimum_height = 1050,
+	own_window = true,
+	own_window_transparent = true,
+	own_window_class = 'conky',
+	own_window_argb_visual = true,
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	background = false,
+	border_inner_margin = 0,
+	border_outer_margin = 0,
+	alignment = 'top_right',
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = false,
+	use_spacer = 'none',
+	short_units = true,
+
+	override_utf8_locale = true,
+	use_xft = true,
+	font = 'Technical CE:bold:size=9',
+	xftalpha = 0.5,
+	uppercase = false,
+
+	default_color = '#ffffff',
+	color1 = '#888888',
+	color2 = '#AAAAAA',
+	color3 = '#DDDDDD',
+	color4 = '#2C2433',
+
+	lua_load = '~/.conky/conky_vu-meters.lua',
+	lua_draw_hook_post = 'main_bars',
+
+};
+
+conky.text = [[
+${image ~/.conky/img/elegant2.png -p 0,0 180x1050}
+${goto 15}${font Technical CE:bold:size=12}${color}$sysname
+${goto 15}${font}${color}$kernel on $machine
+${goto 15}${exec cat /etc/issue.net}
+${goto 15}CPU: ${execi 1000 cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 1-32}
+${goto 15}CPU Speed: ${exec cat /proc/cpuinfo | grep 'model name' | uniq | awk '{print $10}' }
+${goto 15}UPDATES: ${color}${execi 360 aptitude search "~U" | wc -l | tail}
+${goto 7}${color2}------------------------------------------------
+${color}${goto 15}GPU1:${goto 65}${color}${exec nvidia-settings -t -q [gpu:0]/GPUCoreTemp} °C ${color} ${goto 125}GPU2:${goto 180}${color}${exec nvidia-settings -t -q [gpu:1]/GPUCoreTemp} °C
+#${color}${goto 15}HDD1:${goto 65}${color}${hddtemp /dev/sda} °C  ${color}${goto 125}HDD2:    ${color}${hddtemp /dev/sdb} °C 
+#${color}${goto 15}HDD3:${goto 65}${color}${hddtemp /dev/sdc} °C  ${color}${goto 125}HDD4:    ${color}${hddtemp /dev/sdd} °C
+${goto 15}${color}Core0:${goto 65}${color}${execi 30 sensors|grep 'Core 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 125}${color}Core1:     ${color}${execi 30 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 15}${color}Core2:${goto 65}${color}${execi 30 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 125}${color}Core3:    ${color}${execi 30 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${color2}
+${goto 15}${color}HDD1:${goto 65}${hddtemp /dev/sda} °C ${goto 125}HDD2:${goto 180}${hddtemp /dev/sdb} °C
+${goto 15}HDD3:${goto 65}${hddtemp /dev/sdc} °C ${goto 125}HDD4:${goto 180}${hddtemp /dev/sdd} °C
+${goto 7}${color2}------------------------------------------------
+${goto 15}${font Technical CE:bold:size=12}${color}CPU Load:
+${goto 15}${font}${color}Core 1:${goto 65}${cpu cpu0}%
+${goto 15}${color}Core 2:${goto 65}${cpu cpu1}%
+${goto 15}${color}Core 3:${goto 65}${cpu cpu2}%
+${goto 15}${color}Core 4:${goto 65}${cpu cpu3}%
+${goto 7}${color2}------------------------------------------------
+${goto 15}${top name 1}${goto 135}${top pid 1}${goto 175}${top cpu 1}%
+${goto 15}${top name 2}${goto 135}${top pid 2}${goto 175}${top cpu 2}%
+${goto 15}${top name 3}${goto 135}${top pid 3}${goto 175}${top cpu 3}%
+${goto 15}${top name 4}${goto 135}${top pid 4}${goto 175}${top cpu 4}%
+${goto 15}${top name 5}${goto 135}${top pid 5}${goto 175}${top cpu 5}%
+${goto 7}${color2}------------------------------------------------
+${goto 15}$processes${goto 55}Total Processes
+${goto 15}$running_threads${goto 55}Running Threads 
+${goto 7}${color2}------------------------------------------------
+${goto 15}${font Technical CE:bold:size=12}${color}Memory:
+${goto 15}${font}${color}RAM${goto 55}$mem
+${goto 15}System Ram:${goto 110}$memperc%  of${goto 160}$memmax
+${goto 15}${top_mem name 1}${goto 135}${top_mem pid 1}${goto 175}${top_mem mem 1}%
+${goto 15}${top_mem name 2}${goto 135}${top_mem pid 2}${goto 175}${top_mem mem 2}%
+${goto 15}${top_mem name 3}${goto 135}${top_mem pid 3}${goto 175}${top_mem mem 3}%
+${goto 15}${top_mem name 4}${goto 135}${top_mem pid 4}${goto 175}${top_mem mem 4}%
+${goto 15}${top_mem name 5}${goto 135}${top_mem pid 5}${goto 175}${top_mem mem 5}%
+${goto 7}${color2}------------------------------------------------
+${goto 15}${font Technical CE:bold:size=12}${color}Disks:
+${goto 15}${font}${color}Home ${goto 56}${fs_used /home}
+${goto 15}Root ${goto 58}${fs_used /}
+${goto 15}EX2 ${goto 58}${fs_used /mnt/EX2}
+${goto 15}EX2h ${goto 58}${fs_used /mnt/EX2home}
+${goto 15}Data ${goto 58}${fs_used /media/Storage}
+${goto 7}${color2}------------------------------------------------
+${goto 15}${font Technical CE:bold:size=12}${color}Network:
+${goto 15}${color}${font}Public:${goto 65}${execi 3600 wget -q -O - checkip.dyndns.org | sed -e 's/[^[:digit:]\|.]//g'}
+${goto 15}Lan:${goto 65}${addr bond0}
+${goto 15}Down:${goto 65}${downspeed bond0}
+${goto 15}Up:${goto 65}${upspeed bond0}
+${goto 15}Total Down:${goto 95}${totaldown bond0}
+${goto 15}Total Up:${goto 95}${totalup bond0}
+${goto 7}${color2}------------------------------------------------
+${goto 15}${font Technical CE:bold:size=12}${color}Ports:
+${goto 15}${font}Inbound Ports:${goto 130}${tcp_portmon 1 32767 count}
+${goto 15}Outbound Ports:${goto 130}${tcp_portmon 32768 61000 count}
+${goto 15}IP:  ${tcp_portmon 1 65535 rip  0}
+${goto 37}${tcp_portmon 1 65535 rip  1}
+${goto 37}${tcp_portmon 1 65535 rip  2}
+${goto 37}${tcp_portmon 1 65535 rip  3}
+${goto 37}${tcp_portmon 1 65535 rip  4}
+${goto 37}${tcp_portmon 1 65535 rip  5}
+
+]];
